@@ -1,0 +1,165 @@
+---
+import '../../styles/global.css';
+import LectureSlide from '../../components/LectureSlide.astro';
+
+const drugs = [
+  ['Epinephrine', 'a1 a2 b1 b2', 'Low-dose beta effects; high-dose alpha vasoconstriction'],
+  ['Norepinephrine', 'Strong a1 + moderate b1', 'Powerful vasopressor with reflex bradycardia potential'],
+  ['Dopamine', 'D1 -> b1 -> a1 (dose-dependent)', 'Different bedside effects across infusion ranges'],
+  ['Dobutamine', 'Mostly b1', 'Inotropy with less vasoconstriction'],
+  ['Isoproterenol', 'b1 + b2', 'Near-pure beta stimulation with arrhythmia risk'],
+];
+
+const dopamineBands = [
+  ['1-5 mcg/kg/min', 'D1 dominant', 'Renal/mesenteric vasodilation'],
+  ['5-10 mcg/kg/min', 'b1 dominant', 'Increased HR and contractility'],
+  ['>10 mcg/kg/min', 'a1 dominant', 'Vasoconstriction and pressure support'],
+];
+
+const clinicalMap = [
+  ['Anaphylaxis', 'Epinephrine IM', 'a1 + b1 + b2 makes it uniquely complete'],
+  ['Septic shock', 'Norepinephrine', 'Restores vascular tone with manageable beta stimulation'],
+  ['Cardiac arrest', 'Epinephrine', 'Improves perfusion pressure during CPR'],
+  ['Acute decomp HF', 'Dobutamine', 'Improves pump function when BP can tolerate'],
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Lecture 2: Adrenergic Agonists I</title>
+  </head>
+  <body class="min-h-screen bg-base-200">
+    <div class="navbar sticky top-0 z-10 border-b border-base-300 bg-base-100/95 shadow-sm backdrop-blur">
+      <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4">
+        <a href="/autonomic-nervous-system/" class="btn btn-ghost text-lg normal-case">ANS Lecture Deck</a>
+        <div class="join">
+          <a href="/autonomic-nervous-system/lecture-1/" class="btn btn-sm join-item">Lecture 1</a>
+          <a class="btn btn-sm join-item btn-disabled">Lecture 2</a>
+          <a href="/autonomic-nervous-system/lecture-3/" class="btn btn-sm join-item">Lecture 3</a>
+        </div>
+      </div>
+    </div>
+
+    <main class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8">
+      <LectureSlide
+        badge="Lecture 2"
+        title="Adrenergic Agonists I: Catecholamines"
+        subtitle="Epinephrine, norepinephrine, dopamine, dobutamine, and isoproterenol"
+        narrative="Begin by reading the full title and subtitle so students know this lecture focuses on five core catecholamines and their real clinical roles. Then move directly to the blue alert box and explain each phrase: rapid MAO and COMT metabolism means short duration, limited oral reliability, and common use as IV or injectable therapy. Emphasize that this pharmacokinetic reality is why these drugs are often managed in monitored settings with frequent reassessment. Students should connect the title content and alert content immediately, because route and monitoring requirements are as important as receptor profile in nursing care."
+        tone="secondary"
+      >
+        <div class="alert alert-info">
+          <span>Catecholamine structure explains rapid MAO/COMT metabolism, poor oral utility, and short action.</span>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 2"
+        title="Receptor Profiles at a Glance"
+        subtitle="Pattern recognition before memorization"
+        narrative="Use this table as the main discussion tool and cover every row and column. For epinephrine, explain why broad alpha and beta activity creates dose-dependent shifts. For norepinephrine, explain dominant alpha vasopressor behavior with baroreflex implications. For dopamine, identify dose-shifting receptor dominance. For dobutamine, emphasize inotropy with less vasoconstriction. For isoproterenol, emphasize strong beta effects and arrhythmia risk context. Students should hear each row spoken in the same structure: receptor profile, expected physiology, likely indication, and likely adverse pattern."
+      >
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>Drug</th>
+                <th>Profile</th>
+                <th>High-Yield Effect Pattern</th>
+              </tr>
+            </thead>
+            <tbody>
+              {drugs.map(([drug, profile, effect]) => (
+                <tr>
+                  <td class="font-semibold">{drug}</td>
+                  <td>{profile}</td>
+                  <td>{effect}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 3"
+        title="Dopamine: Dose-Dependent Pharmacology"
+        subtitle="One drug, three practical physiologic profiles"
+        narrative="This slide should be taught in two parts. First, read the dose-response table from top to bottom: low-dose D1 effects on renal and mesenteric beds, moderate-dose beta-1 effects on heart rate and contractility, and high-dose alpha-1 vasoconstrictive pressure support. For each row, add a nursing monitoring focus such as rhythm changes, pressure response, and perfusion assessment. Second, discuss the warning alert about historical renal-dose assumptions and explain that current practice requires evidence-based interpretation, not tradition."
+      >
+        <div class="overflow-x-auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Dose</th>
+                <th>Dominant Target</th>
+                <th>Clinical Effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dopamineBands.map(([dose, target, effect]) => (
+                <tr>
+                  <td class="font-semibold">{dose}</td>
+                  <td>{target}</td>
+                  <td>{effect}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-warning">
+          <span>Historical low-dose renal protection with dopamine has weak evidence and should be discussed critically.</span>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 4"
+        title="Clinical Use Anchors"
+        subtitle="Why these agents are selected in high-acuity settings"
+        narrative="This slide contains four scenario cards, and each card should be presented as a mini case. In the anaphylaxis card, explain why alpha, beta-1, and beta-2 coverage is uniquely lifesaving. In the septic-shock card, explain vascular-tone restoration priority. In the cardiac-arrest card, explain perfusion-pressure goals during CPR. In the acute heart-failure card, explain why inotropy may be prioritized when blood pressure allows. Compare all four cards so students can see how the same adrenergic family is deployed differently depending on pathophysiology."
+      >
+        <div class="grid gap-4 md:grid-cols-2">
+          {clinicalMap.map(([scenario, agent, why]) => (
+            <article class="rounded-box bg-base-200 p-4">
+              <h3 class="mb-1 text-lg font-semibold">{scenario}</h3>
+              <p><span class="font-semibold">Typical first choice:</span> {agent}</p>
+              <p><span class="font-semibold">Reason:</span> {why}</p>
+            </article>
+          ))}
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 5"
+        title="Nursing Monitoring and Infusion Safety"
+        subtitle="Administration quality determines outcomes as much as drug selection"
+        narrative="This slide has two operational safety panels and both should be discussed item-by-item. In Core Monitoring, address each bullet as a required bedside task: continuous rhythm and pressure tracking, urine output trends, peripheral perfusion checks, and electrolyte awareness. In Extravasation Response, read the numbered sequence in order and stress timing: stop infusion, escalate immediately, prepare phentolamine, and document and reassess tissue status. Students should leave this slide understanding that each listed item is a concrete nursing action tied directly to prevention of organ hypoperfusion and local tissue loss."
+        tone="error"
+      >
+        <div class="grid gap-4 md:grid-cols-2">
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="mb-2 font-semibold">Core Monitoring</h3>
+            <ul class="list-disc space-y-1 pl-5">
+              <li>Continuous HR/rhythm and frequent BP or arterial line MAP</li>
+              <li>Urine output trend for perfusion adequacy</li>
+              <li>Peripheral perfusion and extremity ischemia checks</li>
+              <li>Electrolyte surveillance with arrhythmia concern</li>
+            </ul>
+          </article>
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="mb-2 font-semibold">Extravasation Response</h3>
+            <ol class="list-decimal space-y-1 pl-5">
+              <li>Stop infusion at first blanching/coolness/pain</li>
+              <li>Notify provider immediately</li>
+              <li>Prepare phentolamine for local reversal</li>
+              <li>Document tissue findings and reassessment closely</li>
+            </ol>
+          </article>
+        </div>
+      </LectureSlide>
+    </main>
+  </body>
+</html>

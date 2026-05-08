@@ -1,0 +1,76 @@
+---
+interface Props {
+  id?: string;
+  badge?: string;
+  badgeTip?: string;
+  title: string;
+  titleTip?: string;
+  subtitle?: string;
+  subtitleTip?: string;
+  narrative?: string;
+  tone?: 'primary' | 'secondary' | 'accent' | 'neutral' | 'info' | 'success' | 'warning' | 'error';
+}
+
+const {
+  id,
+  badge,
+  badgeTip,
+  title,
+  titleTip,
+  subtitle,
+  subtitleTip,
+  narrative,
+  tone = 'info',
+} = Astro.props as Props;
+---
+
+<section id={id} class="lecture-slide card min-h-[70vh] overflow-visible border border-base-300 bg-base-100 shadow-xl">
+  <div class="card-body gap-5 overflow-visible p-8 md:p-10">
+    <div class="space-y-3">
+      {
+        badge &&
+          (badgeTip ? (
+            <span class="tooltip tooltip-bottom" data-tip={badgeTip}>
+              <span class="badge badge-outline">{badge}</span>
+            </span>
+          ) : (
+            <span class="badge badge-outline">{badge}</span>
+          ))
+      }
+      {
+        titleTip ? (
+          <span class="tooltip tooltip-bottom block" data-tip={titleTip}>
+            <h2 class="text-3xl font-bold leading-tight md:text-4xl">{title}</h2>
+          </span>
+        ) : (
+          <h2 class="text-3xl font-bold leading-tight md:text-4xl">{title}</h2>
+        )
+      }
+      {
+        subtitle &&
+          (subtitleTip ? (
+            <span class="tooltip tooltip-bottom block" data-tip={subtitleTip}>
+              <p class="max-w-4xl text-base text-base-content/80 md:text-lg">{subtitle}</p>
+            </span>
+          ) : (
+            <p class="max-w-4xl text-base text-base-content/80 md:text-lg">{subtitle}</p>
+          ))
+      }
+    </div>
+
+    <div class="grid gap-6">
+      <slot />
+    </div>
+
+    {
+      narrative && (
+        <div class={`alert alert-${tone}`}>
+          <div class="grid gap-1">
+            <span class="text-sm font-semibold uppercase tracking-wide">Lecturer Script</span>
+            <p>{narrative}</p>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>

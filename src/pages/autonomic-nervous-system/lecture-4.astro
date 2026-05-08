@@ -1,0 +1,148 @@
+---
+import '../../styles/global.css';
+import LectureSlide from '../../components/LectureSlide.astro';
+
+const nonSelective = [
+  ['Phentolamine', 'Reversible competitive a1 + a2 blockade', 'Acute pheochromocytoma crisis; catecholamine extravasation antidote'],
+  ['Phenoxybenzamine', 'Irreversible non-competitive a1 + a2 blockade', 'Pre-op pheochromocytoma preparation'],
+];
+
+const selective = [
+  ['Prazosin', 'Selective a1 blocker, short half-life', 'HTN/BPH and off-label PTSD nightmares'],
+  ['Terazosin', 'Selective a1 blocker, longer acting', 'HTN or BPH with once-daily convenience'],
+  ['Doxazosin', 'Selective a1 blocker, longest acting in class', 'HTN/BPH, usually not first-line HTN agent'],
+  ['Tamsulosin', 'a1A/a1D uroselective profile', 'BPH symptom relief with lower orthostatic burden'],
+  ['Alfuzosin', 'Clinically uroselective', 'BPH with QT caution in susceptible patients'],
+];
+
+const firstDoseSafety = [
+  'Administer first dose at bedtime to reduce injury risk from syncope.',
+  'Start low and titrate gradually; repeat caution with dose increases.',
+  'Teach slow position changes from lying to standing.',
+  'Check orthostatic vitals after initiation and titration.',
+  'Increase fall precautions in older, volume-depleted, or multi-drug patients.',
+  'Review additive hypotension risks (alcohol, antihypertensives, PDE5 inhibitors).',
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Lecture 4: Alpha-Adrenergic Blockers</title>
+  </head>
+  <body class="min-h-screen bg-base-200">
+    <div class="navbar sticky top-0 z-10 border-b border-base-300 bg-base-100/95 shadow-sm backdrop-blur">
+      <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4">
+        <a href="/autonomic-nervous-system/" class="btn btn-ghost text-lg normal-case">ANS Lecture Deck</a>
+        <div class="join">
+          <a href="/autonomic-nervous-system/lecture-3/" class="btn btn-sm join-item">Lecture 3</a>
+          <a class="btn btn-sm join-item btn-disabled">Lecture 4</a>
+        </div>
+      </div>
+    </div>
+
+    <main class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8">
+      <LectureSlide
+        badge="Lecture 4"
+        title="Alpha-Adrenergic Blockers"
+        subtitle="From receptor blockade logic to hypertension, BPH, and pheochromocytoma sequencing"
+        narrative="Begin with the title and subtitle, then move directly to the information alert because it defines the organizing rule for the entire lecture. Explain that non-selective agents block both alpha-1 and alpha-2, while selective agents focus primarily on alpha-1 effects. This one distinction should be repeated as the framework for understanding differences in reflex tachycardia, tolerability, and long-term use patterns shown on later slides."
+        tone="neutral"
+      >
+        <div class="alert alert-info">
+          <span>Organizing rule: non-selective agents block a1 and a2; selective agents mainly target a1.</span>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 2"
+        title="Non-Selective Alpha Blockers"
+        subtitle="Powerful acute tools with characteristic tachycardia trade-offs"
+        narrative="This slide has two components to cover fully: the comparison table and the warning alert. In the table, review phentolamine and phenoxybenzamine line by line, emphasizing competitive reversible versus irreversible blockade and why that matters in acute versus preoperative use. Then address the warning alert on epinephrine reversal and explain how alpha blockade can unmask beta-mediated vasodilatory effects. Students should leave this slide understanding both drugs and the alert concept as one integrated receptor-physiology lesson."
+      >
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>Drug</th>
+                <th>Mechanism</th>
+                <th>Primary Clinical Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              {nonSelective.map(([drug, mechanism, use]) => (
+                <tr>
+                  <td class="font-semibold">{drug}</td>
+                  <td>{mechanism}</td>
+                  <td>{use}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-warning">
+          <span>Epinephrine reversal with full alpha blockade is a classic exam and reasoning concept.</span>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 3"
+        title="Selective a1 Blockers"
+        subtitle="Chronic-use options for blood pressure and lower urinary tract symptoms"
+        narrative="This table should be presented as a complete five-agent review, covering each row and both descriptive columns. Discuss prazosin, terazosin, and doxazosin as broader alpha-1 options with cardiovascular implications, then compare tamsulosin and alfuzosin as more uro-focused choices for BPH symptom relief. Explain how profile details translate into counseling points, orthostatic risk expectations, and selection strategy for patients with or without concurrent hypertension."
+      >
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>Agent</th>
+                <th>Profile</th>
+                <th>Typical Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selective.map(([drug, profile, role]) => (
+                <tr>
+                  <td class="font-semibold">{drug}</td>
+                  <td>{profile}</td>
+                  <td>{role}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 4"
+        title="Pheochromocytoma Sequencing Rule"
+        subtitle="Alpha first, then beta if needed"
+        narrative="The steps diagram on this slide should be read left to right exactly as displayed because sequencing is the safety message. First establish alpha blockade, then stabilize pressure and volume, then add beta blockade only after alpha control, then use short-acting intraoperative alpha support when needed. Discuss why each step exists and why changing the order increases risk. Students should treat this step sequence as a strict protocol in pheochromocytoma management."
+        tone="error"
+      >
+        <div class="steps steps-vertical lg:steps-horizontal">
+          <div class="step step-primary">Establish alpha blockade</div>
+          <div class="step step-primary">Control volume and pressure</div>
+          <div class="step step-primary">Add beta blocker only after alpha blockade</div>
+          <div class="step step-primary">Use short-acting IV alpha blockade intra-op if needed</div>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 5"
+        title="First-Dose Orthostatic Hypotension"
+        subtitle="Primary safety risk for selective a1 blockers in routine practice"
+        narrative="This final slide is a six-item safety checklist and each bullet should be discussed directly in order. Cover bedtime first dose strategy, gradual titration, slow positional changes, orthostatic-vital follow-up, fall-risk precautions in vulnerable patients, and interaction risks with alcohol, antihypertensives, and PDE5 inhibitors. Present each bullet as a concrete nursing intervention, because this checklist is designed to prevent syncope, falls, and injury during alpha-blocker initiation and titration."
+        tone="success"
+      >
+        <ul class="list-disc space-y-1 pl-5">
+          {firstDoseSafety.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </LectureSlide>
+    </main>
+  </body>
+</html>

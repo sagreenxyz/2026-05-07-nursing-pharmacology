@@ -1,0 +1,162 @@
+---
+import '../../styles/global.css';
+import LectureSlide from '../../components/LectureSlide.astro';
+
+const coreAgents = [
+  ['Phenylephrine', 'Selective a1 agonist', 'Hypotension, decongestion, mydriasis', 'Reflex bradycardia from pressure rise'],
+  ['Pseudoephedrine', 'Mixed acting (direct + NE release)', 'Oral decongestion', 'CNS stimulation and BP elevation'],
+  ['Albuterol', 'Selective b2 agonist (SABA)', 'Rescue bronchodilation', 'Tremor, tachycardia, hypokalemia'],
+  ['Salmeterol', 'Long-acting b2 agonist (LABA)', 'Maintenance bronchodilation', 'Not for acute rescue'],
+  ['Terbutaline', 'Selective b2 agonist', 'Bronchodilation and short-term tocolysis', 'Maternal/fetal tachycardia risk'],
+  ['Midodrine', 'Oral selective a1 agonist prodrug', 'Orthostatic hypotension', 'Supine hypertension'],
+];
+
+const differences = [
+  ['Oral bioavailability', 'No catechol ring means better resistance to COMT and often MAO, enabling oral dosing.'],
+  ['Duration', 'Non-catecholamines act for hours rather than minutes, useful for outpatient schedules.'],
+  ['CNS penetration', 'Varies by lipophilicity: pseudoephedrine stimulates CNS; others are more peripheral at therapeutic dosing.'],
+];
+
+const clinicalUse = [
+  ['Nasal congestion', 'Phenylephrine, pseudoephedrine', 'Limit topical duration and screen cardiovascular risk'],
+  ['Asthma/COPD', 'Albuterol rescue; salmeterol maintenance', 'LABA must not be monotherapy in asthma'],
+  ['Preterm labor (short-term)', 'Terbutaline', 'Use as bridge strategy, not long-term tocolysis'],
+  ['Orthostatic hypotension', 'Midodrine', 'Avoid bedtime dosing to prevent supine hypertension'],
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Lecture 3: Adrenergic Agonists II</title>
+  </head>
+  <body class="min-h-screen bg-base-200">
+    <div class="navbar sticky top-0 z-10 border-b border-base-300 bg-base-100/95 shadow-sm backdrop-blur">
+      <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4">
+        <a href="/autonomic-nervous-system/" class="btn btn-ghost text-lg normal-case">ANS Lecture Deck</a>
+        <div class="join">
+          <a href="/autonomic-nervous-system/lecture-2/" class="btn btn-sm join-item">Lecture 2</a>
+          <a class="btn btn-sm join-item btn-disabled">Lecture 3</a>
+          <a href="/autonomic-nervous-system/lecture-4/" class="btn btn-sm join-item">Lecture 4</a>
+        </div>
+      </div>
+    </div>
+
+    <main class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8">
+      <LectureSlide
+        badge="Lecture 3"
+        title="Adrenergic Agonists II: Non-Catecholamines"
+        subtitle="Selectivity and pharmacokinetics explain why these agents exist beyond epinephrine."
+        narrative="Begin by reading the title and subtitle so students understand the lecture focus is non-catecholamine agonists and why they matter clinically. Then address the information alert directly: structural loss of the catechol ring changes metabolism, route flexibility, and duration of action. Explain each of those outcomes in practical nursing language, including why some of these drugs are suitable for outpatient scheduling and chronic symptom control while catecholamines often require acute monitored use."
+        tone="accent"
+      >
+        <div class="alert alert-info">
+          <span>Structural lesson: removing the catechol ring changes metabolism, route options, and duration.</span>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 2"
+        title="Key Non-Catecholamine Agents"
+        subtitle="Drug-by-drug profile with bedside implications"
+        narrative="This table has six rows and four columns, and all cells should be discussed. Start with phenylephrine and pseudoephedrine to contrast selective alpha action versus mixed direct and indirect sympathomimetic activity. Continue with albuterol, salmeterol, and terbutaline to compare beta-2 use patterns and safety concerns. Finish with midodrine as oral alpha-1 support for orthostatic hypotension. For every row, explicitly connect receptor action, typical use, and high-yield risk so students can apply the table as a full clinical reasoning matrix."
+      >
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>Drug</th>
+                <th>Receptor Action</th>
+                <th>Typical Use</th>
+                <th>High-Yield Risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              {coreAgents.map(([drug, receptor, use, risk]) => (
+                <tr>
+                  <td class="font-semibold">{drug}</td>
+                  <td>{receptor}</td>
+                  <td>{use}</td>
+                  <td>{risk}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 3"
+        title="How They Differ from Catecholamines"
+        subtitle="PK differences that drive real prescribing decisions"
+        narrative="This slide includes three concept cards and each card should be explained in full. In the Oral Bioavailability card, explain why structural resistance to metabolic breakdown supports oral use. In the Duration card, explain why slower clearance enables maintenance scheduling but can prolong side effects. In the CNS Penetration card, explain why lipophilicity differences affect insomnia, agitation, and misuse potential. Discuss all three cards as linked concepts so students understand that pharmacokinetics shapes both efficacy and safety counseling."
+      >
+        <div class="grid gap-4 md:grid-cols-3">
+          {differences.map(([topic, detail]) => (
+            <article class="rounded-box bg-base-200 p-4">
+              <h3 class="mb-2 font-semibold">{topic}</h3>
+              <p>{detail}</p>
+            </article>
+          ))}
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 4"
+        title="Clinical Applications"
+        subtitle="From congestion and bronchodilation to tocolysis and orthostatic care"
+        narrative="This table should be covered row by row with full attention to the nursing caveat column. For Nasal Congestion, discuss decongestant utility and cardiovascular caution. For Asthma and COPD, clearly separate rescue and maintenance strategy. For Preterm Labor short-term use, explain risk-benefit and monitoring intensity. For Orthostatic Hypotension, explain timing and positional safety. Students should hear every caveat because these details are the practical safeguards that prevent medication misuse."
+      >
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>Clinical Need</th>
+                <th>Representative Agents</th>
+                <th>Nursing Caveat</th>
+              </tr>
+            </thead>
+            <tbody>
+              {clinicalUse.map(([need, agents, caveat]) => (
+                <tr>
+                  <td class="font-semibold">{need}</td>
+                  <td>{agents}</td>
+                  <td>{caveat}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        badge="Slide 5"
+        title="Nursing Safety and Patient Teaching"
+        subtitle="Errors here are usually misuse errors, not obscure pharmacology problems"
+        narrative="This slide ends with two safety cards, and each bullet in both cards should be reviewed directly. In Respiratory Agents, discuss rescue versus scheduled prevention and reinforce why LABA monotherapy is unsafe in asthma. In Systemic Agents, discuss MAOI interaction risk with pseudoephedrine, maternal and fetal monitoring with terbutaline, and bedtime timing precautions with midodrine. Present these cards as practical counseling scripts nurses can use during medication teaching."
+        tone="warning"
+      >
+        <div class="grid gap-4 md:grid-cols-2">
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="mb-2 font-semibold">Respiratory Agents</h3>
+            <ul class="list-disc space-y-1 pl-5">
+              <li>Albuterol is rescue; salmeterol is scheduled prevention.</li>
+              <li>LABA monotherapy is unsafe in asthma.</li>
+              <li>Verify inhaler technique at every encounter.</li>
+            </ul>
+          </article>
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="mb-2 font-semibold">Systemic Agents</h3>
+            <ul class="list-disc space-y-1 pl-5">
+              <li>Avoid pseudoephedrine with MAO inhibitors.</li>
+              <li>Monitor terbutaline tocolysis for maternal/fetal tachycardia.</li>
+              <li>Do not give midodrine close to bedtime.</li>
+            </ul>
+          </article>
+        </div>
+      </LectureSlide>
+    </main>
+  </body>
+</html>

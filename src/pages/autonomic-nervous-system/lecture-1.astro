@@ -1,0 +1,335 @@
+---
+import '../../styles/global.css';
+import LectureSlide from '../../components/LectureSlide.astro';
+
+const organEffects = [
+  ['Heart', 'Increases HR, contractility, AV conduction', 'Decreases HR and AV conduction'],
+  ['Blood vessels', 'Mostly vasoconstriction; selective vasodilation in active skeletal muscle', 'Minimal direct effect in most beds'],
+  ['Lungs', 'Bronchodilation, lower secretions', 'Bronchoconstriction, more mucus'],
+  ['GI tract', 'Lower motility and secretion; tighter sphincters', 'Higher motility and secretion; relaxed sphincters'],
+  ['Bladder', 'Detrusor relaxation and sphincter contraction', 'Detrusor contraction and sphincter relaxation'],
+  ['Eye', 'Mydriasis and far focus', 'Miosis and near focus'],
+  ['Skin', 'Sweating and piloerection', 'Minimal direct role'],
+  ['Liver', 'Glycogenolysis and gluconeogenesis', 'Glycogen synthesis support'],
+  ['Salivary glands', 'Small-volume viscous saliva', 'Large-volume watery saliva'],
+];
+
+const organEffectTooltips: Record<string, { organ: string; sympathetic: string; parasympathetic: string }> = {
+  Heart: {
+    organ: 'Heart row identifies the cardiac target where autonomic tone changes rate, force, and conduction.',
+    sympathetic: 'Heart sympathetic cell Increases HR, contractility, AV conduction means sympathetic drive raises chronotropy, inotropy, and AV nodal conduction, so watch for tachyarrhythmia stress.',
+    parasympathetic: 'Heart parasympathetic cell Decreases HR and AV conduction means vagal tone slows pacemaker firing and AV conduction, which can protect or over-slow rhythm.',
+  },
+  'Blood vessels': {
+    organ: 'Blood vessels row identifies vascular tone control that strongly influences perfusion pressure.',
+    sympathetic: 'Blood vessels sympathetic cell Mostly vasoconstriction; selective vasodilation in active skeletal muscle means baseline sympathetic tone supports blood pressure while exercise redistributes flow.',
+    parasympathetic: 'Blood vessels parasympathetic cell Minimal direct effect in most beds means blood pressure changes are usually dominated by sympathetic mechanisms.',
+  },
+  Lungs: {
+    organ: 'Lungs row identifies airway caliber and secretion control, which directly affects ventilation.',
+    sympathetic: 'Lungs sympathetic cell Bronchodilation, lower secretions means sympathetic activation opens airways and reduces mucus burden.',
+    parasympathetic: 'Lungs parasympathetic cell Bronchoconstriction, more mucus means cholinergic dominance can narrow airways and increase secretion load.',
+  },
+  'GI tract': {
+    organ: 'GI tract row identifies motility and secretion patterns that drive bowel function.',
+    sympathetic: 'GI tract sympathetic cell Lower motility and secretion; tighter sphincters means stress physiology slows digestion and increases sphincter tone.',
+    parasympathetic: 'GI tract parasympathetic cell Higher motility and secretion; relaxed sphincters means rest-and-digest physiology promotes transit and elimination.',
+  },
+  Bladder: {
+    organ: 'Bladder row identifies storage versus voiding balance, a common medication side-effect domain.',
+    sympathetic: 'Bladder sympathetic cell Detrusor relaxation and sphincter contraction means sympathetic tone favors urine storage.',
+    parasympathetic: 'Bladder parasympathetic cell Detrusor contraction and sphincter relaxation means parasympathetic tone favors bladder emptying.',
+  },
+  Eye: {
+    organ: 'Eye row identifies pupil and focus control that appears in many autonomic adverse-effect patterns.',
+    sympathetic: 'Eye sympathetic cell Mydriasis and far focus means sympathetic drive dilates pupils and supports distance vision.',
+    parasympathetic: 'Eye parasympathetic cell Miosis and near focus means parasympathetic tone constricts pupils and supports accommodation.',
+  },
+  Skin: {
+    organ: 'Skin row identifies autonomic signs that can serve as early bedside clues.',
+    sympathetic: 'Skin sympathetic cell Sweating and piloerection means sympathetic activation produces diaphoresis and piloerection findings.',
+    parasympathetic: 'Skin parasympathetic cell Minimal direct role means most skin autonomic signs are not parasympathetic driven.',
+  },
+  Liver: {
+    organ: 'Liver row identifies metabolic autonomic effects that alter glucose availability.',
+    sympathetic: 'Liver sympathetic cell Glycogenolysis and gluconeogenesis means sympathetic activation raises circulating glucose to support stress demand.',
+    parasympathetic: 'Liver parasympathetic cell Glycogen synthesis support means parasympathetic tone favors energy storage and recovery states.',
+  },
+  'Salivary glands': {
+    organ: 'Salivary glands row identifies secretion quality changes commonly reported by patients.',
+    sympathetic: 'Salivary glands sympathetic cell Small-volume viscous saliva means sympathetic dominance produces thicker, lower-volume secretions.',
+    parasympathetic: 'Salivary glands parasympathetic cell Large-volume watery saliva means parasympathetic tone supports thin, abundant salivary flow.',
+  },
+};
+
+const receptorRows = [
+  ['a1', 'Vascular smooth muscle, iris radial muscle, bladder sphincter', 'Vasoconstriction, mydriasis, urinary retention tendency'],
+  ['a2', 'Presynaptic terminals and CNS', 'Reduced NE release and reduced sympathetic outflow'],
+  ['b1', 'Heart and kidney', 'Increased HR, contractility, conduction, and renin release'],
+  ['b2', 'Bronchi, uterus, liver, skeletal muscle vasculature', 'Bronchodilation, uterine relaxation, glycogenolysis'],
+  ['b3', 'Bladder detrusor', 'Detrusor relaxation'],
+  ['Muscarinic', 'Parasympathetic target organs', 'Rest-and-digest effects (M2/M3 emphasis)'],
+  ['Nicotinic NN/NM', 'Autonomic ganglia / NMJ', 'Autonomic transmission / skeletal muscle contraction'],
+];
+
+const receptorRowTooltips: Record<string, { receptor: string; locations: string; consequence: string }> = {
+  a1: {
+    receptor: 'a1 receptor row identifies the alpha-1 adrenergic target group most associated with vascular tone and outlet resistance.',
+    locations: 'a1 locations cell Vascular smooth muscle, iris radial muscle, bladder sphincter means alpha-1 signaling controls vasoconstriction, pupil dilation pathways, and urinary sphincter tone.',
+    consequence: 'a1 consequence cell Vasoconstriction, mydriasis, urinary retention tendency means alpha-1 stimulation can raise blood pressure, dilate pupils, and increase retention risk.',
+  },
+  a2: {
+    receptor: 'a2 receptor row identifies the alpha-2 feedback receptor that reduces sympathetic output when activated.',
+    locations: 'a2 locations cell Presynaptic terminals and CNS means alpha-2 acts at nerve endings and central pathways to modulate norepinephrine signaling.',
+    consequence: 'a2 consequence cell Reduced NE release and reduced sympathetic outflow means alpha-2 activation can lower adrenergic drive and reduce hemodynamic stress.',
+  },
+  b1: {
+    receptor: 'b1 receptor row identifies the beta-1 receptor group tied to cardiac performance and renin signaling.',
+    locations: 'b1 locations cell Heart and kidney means beta-1 effects are concentrated in myocardium and juxtaglomerular renal tissue.',
+    consequence: 'b1 consequence cell Increased HR, contractility, conduction, and renin release means beta-1 stimulation increases cardiac workload and activates renin pathways.',
+  },
+  b2: {
+    receptor: 'b2 receptor row identifies the beta-2 receptor group central to airway, uterine, vascular, and metabolic effects.',
+    locations: 'b2 locations cell Bronchi, uterus, liver, skeletal muscle vasculature means beta-2 signaling affects breathing, uterine tone, glucose handling, and flow distribution.',
+    consequence: 'b2 consequence cell Bronchodilation, uterine relaxation, glycogenolysis means beta-2 activation can improve airflow, relax uterine smooth muscle, and raise glucose availability.',
+  },
+  b3: {
+    receptor: 'b3 receptor row identifies the beta-3 receptor target linked to bladder storage physiology.',
+    locations: 'b3 locations cell Bladder detrusor means beta-3 signaling acts directly on detrusor smooth muscle.',
+    consequence: 'b3 consequence cell Detrusor relaxation means beta-3 activation supports urine storage by reducing bladder contraction pressure.',
+  },
+  Muscarinic: {
+    receptor: 'Muscarinic receptor row identifies parasympathetic end-organ receptors that drive rest-and-digest responses.',
+    locations: 'Muscarinic locations cell Parasympathetic target organs means muscarinic signaling appears across heart, lungs, GI tract, bladder, eye, and glands.',
+    consequence: 'Muscarinic consequence cell Rest-and-digest effects (M2/M3 emphasis) means muscarinic activation slows cardiac pace while increasing smooth muscle and glandular activity.',
+  },
+  'Nicotinic NN/NM': {
+    receptor: 'Nicotinic NN/NM row identifies two distinct nicotinic receptor domains that must not be conflated.',
+    locations: 'Nicotinic locations cell Autonomic ganglia / NMJ means NN receptors mediate ganglionic transmission while NM receptors mediate skeletal neuromuscular transmission.',
+    consequence: 'Nicotinic consequence cell Autonomic transmission / skeletal muscle contraction means receptor subtype determines whether effects are autonomic-wide or focused on skeletal paralysis pathways.',
+  },
+};
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Lecture 1: ANS Physiology Review</title>
+  </head>
+  <body class="min-h-screen bg-base-200">
+    <div class="navbar sticky top-0 z-10 border-b border-base-300 bg-base-100/95 shadow-sm backdrop-blur">
+      <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4">
+        <a href="/autonomic-nervous-system/" class="btn btn-ghost text-lg normal-case">ANS Lecture Deck</a>
+        <div class="join">
+          <a class="btn btn-sm join-item btn-disabled">Lecture 1</a>
+          <a href="/autonomic-nervous-system/lecture-2/" class="btn btn-sm join-item">Lecture 2</a>
+        </div>
+      </div>
+    </div>
+
+    <main class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8">
+      <LectureSlide
+        id="slide-1"
+        badge="Lecture 1"
+        badgeTip="The badge Lecture 1 tells you this session is the foundation layer for every autonomic drug decision you will make later in the course."
+        title="ANS Physiology Review"
+        titleTip="The title ANS Physiology Review means we are reviewing physiology to build pharmacology prediction, not memorizing anatomy in isolation."
+        subtitle="Build the map first: branch anatomy, transmitters, receptors, and a repeatable reasoning method."
+        subtitleTip="The subtitle Build the map first: branch anatomy, transmitters, receptors, and a repeatable reasoning method gives you the sequence that prevents random memorization and supports bedside prediction."
+        narrative="Start with the badge, Lecture 1. The badge Lecture 1 tells you this session is the foundation layer for every autonomic drug decision you will make later in the course. Now read the title, ANS Physiology Review. The title ANS Physiology Review means we are reviewing physiology to build pharmacology prediction, not memorizing anatomy in isolation. Now read the subtitle line. The subtitle Build the map first: branch anatomy, transmitters, receptors, and a repeatable reasoning method gives you the sequence that prevents random memorization and supports bedside prediction. Move to the first stat label, Core Branches. The Core Branches label means you must begin every drug question by deciding whether sympathetic or parasympathetic tone is being increased or blocked. Now read the first stat value, 2. The value 2 under Core Branches means there are two governing autonomic branches, and this branch choice drives your first bedside prediction. Move to the second stat label, Major Receptor Families. The Major Receptor Families label means you then sort the drug into adrenergic versus cholinergic receptor logic. Now read the second stat value, 2. The value 2 under Major Receptor Families means these two receptor families organize most therapeutic effects, adverse effects, and monitoring priorities you will face. Move to the third stat label, Reasoning Rule. The Reasoning Rule label means you should use the same structured method every time, especially when a drug is unfamiliar. Now read the third stat value, 4-Step. The 4-Step value means identify receptor target, decide agonist or antagonist, recall normal receptor effect, then predict clinical response and nursing monitoring actions. As the nurse, if you speak through these badge, title, subtitle, and stat elements in order, you can derive safe medication reasoning at the bedside instead of relying on memorization alone."
+        tone="primary"
+      >
+        <div class="stats stats-vertical shadow sm:stats-horizontal">
+          <div class="stat">
+            <div class="stat-title"><span class="tooltip tooltip-bottom" data-tip="The Core Branches label means you must begin every drug question by deciding whether sympathetic or parasympathetic tone is being increased or blocked.">Core Branches</span></div>
+            <div class="stat-value text-primary"><span class="tooltip tooltip-bottom" data-tip="The value 2 under Core Branches means there are two governing autonomic branches, and this branch choice drives your first bedside prediction.">2</span></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title"><span class="tooltip tooltip-bottom" data-tip="The Major Receptor Families label means you then sort the drug into adrenergic versus cholinergic receptor logic.">Major Receptor Families</span></div>
+            <div class="stat-value text-secondary"><span class="tooltip tooltip-bottom" data-tip="The value 2 under Major Receptor Families means these two receptor families organize most therapeutic effects, adverse effects, and monitoring priorities you will face.">2</span></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title"><span class="tooltip tooltip-bottom" data-tip="The Reasoning Rule label means you should use the same structured method every time, especially when a drug is unfamiliar.">Reasoning Rule</span></div>
+            <div class="stat-value text-accent"><span class="tooltip tooltip-bottom" data-tip="The 4-Step value means identify receptor target, decide agonist or antagonist, recall normal receptor effect, then predict clinical response and nursing monitoring actions.">4-Step</span></div>
+          </div>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        id="slide-2"
+        badge="Slide 2"
+        badgeTip="The badge Slide 2 tells you this section is focused on core branch architecture that predicts later drug effects."
+        title="Sympathetic and Parasympathetic Architecture"
+        titleTip="The title Sympathetic and Parasympathetic Architecture means you should compare branch structure directly to predict clinical response patterns."
+        subtitle="Both branches share a two-neuron chain, but origin and fiber lengths differ."
+        subtitleTip="The subtitle Both branches share a two-neuron chain, but origin and fiber lengths differ tells you common pathway is shared but branch wiring differences drive distinct bedside effects."
+        narrative="Start with the badge, Slide 2. The badge Slide 2 tells you this section is focused on core branch architecture that predicts later drug effects. Now read the title, Sympathetic and Parasympathetic Architecture. The title Sympathetic and Parasympathetic Architecture means you should compare branch structure directly to predict clinical response patterns. Now read the subtitle. The subtitle Both branches share a two-neuron chain, but origin and fiber lengths differ tells you common pathway is shared but branch wiring differences drive distinct bedside effects. Move to the left card heading, Sympathetic T1 to L2. The Sympathetic T1 to L2 heading means thoracolumbar origin supports rapid stress-response signaling. Read the first bullet, Thoracolumbar outflow. Thoracolumbar outflow means preganglionic neurons arise from thoracic and lumbar cord segments, so sympathetic drugs often produce broad systemic effects. Read the second bullet, Short preganglionic, long postganglionic fibers. Short preganglionic, long postganglionic fibers means signals leave the cord quickly then distribute widely to organs, which is why monitoring should include multiple systems. Read the third bullet, Paravertebral chain ganglia near spinal cord. Paravertebral chain ganglia near spinal cord means one stress signal can spread efficiently across regions, which helps explain concurrent heart rate and vascular changes. Read the fourth bullet, Adrenal medulla behaves like modified ganglion tissue. Adrenal medulla behaves like modified ganglion tissue means catecholamines can enter circulation and amplify whole-body sympathetic effects. Move to the right card heading, Parasympathetic (CN III, VII, IX, X; S2-S4). The Parasympathetic (CN III, VII, IX, X; S2-S4) heading means craniosacral origin supports targeted maintenance control. Read the first bullet, Craniosacral outflow. Craniosacral outflow means brainstem and sacral origins drive branch effects tied to routine organ regulation. Read the second bullet, Long preganglionic, short postganglionic fibers. Long preganglionic, short postganglionic fibers means synapsing occurs close to target organs, so effects are more localized. Read the third bullet, Ganglia in or near target organs. Ganglia in or near target organs means parasympathetic signaling is organ-specific, which helps you predict focused rather than diffuse responses. Read the fourth bullet, Dominant baseline rest-and-digest tone. Dominant baseline rest-and-digest tone means this branch supports baseline heart-rate slowing, secretion, motility, and voiding physiology. As the nurse, compare each left-right bullet pair because this structural contrast predicts therapeutic effects, adverse effects, and monitoring priorities."
+      >
+        <div class="grid gap-4 md:grid-cols-2">
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="mb-2 text-lg font-semibold">
+              <span class="tooltip tooltip-bottom" data-tip="The Sympathetic T1 to L2 heading means thoracolumbar origin supports rapid stress-response signaling.">Sympathetic (T1-L2)</span>
+            </h3>
+            <ul class="list-disc space-y-1 pl-5">
+              <li><span class="tooltip tooltip-bottom" data-tip="Thoracolumbar outflow means preganglionic neurons arise from thoracic and lumbar cord segments, so sympathetic drugs often produce broad systemic effects.">Thoracolumbar outflow</span></li>
+              <li><span class="tooltip tooltip-bottom" data-tip="Short preganglionic, long postganglionic fibers means signals leave the cord quickly then distribute widely to organs, which is why monitoring should include multiple systems.">Short preganglionic, long postganglionic fibers</span></li>
+              <li><span class="tooltip tooltip-bottom" data-tip="Paravertebral chain ganglia near spinal cord means one stress signal can spread efficiently across regions, which helps explain concurrent heart rate and vascular changes.">Paravertebral chain ganglia near spinal cord</span></li>
+              <li><span class="tooltip tooltip-bottom" data-tip="Adrenal medulla behaves like modified ganglion tissue means catecholamines can enter circulation and amplify whole-body sympathetic effects.">Adrenal medulla behaves like modified ganglion tissue</span></li>
+            </ul>
+          </article>
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="mb-2 text-lg font-semibold">
+              <span class="tooltip tooltip-bottom" data-tip="The Parasympathetic (CN III, VII, IX, X; S2-S4) heading means craniosacral origin supports targeted maintenance control.">Parasympathetic (CN III, VII, IX, X; S2-S4)</span>
+            </h3>
+            <ul class="list-disc space-y-1 pl-5">
+              <li><span class="tooltip tooltip-bottom" data-tip="Craniosacral outflow means brainstem and sacral origins drive branch effects tied to routine organ regulation.">Craniosacral outflow</span></li>
+              <li><span class="tooltip tooltip-bottom" data-tip="Long preganglionic, short postganglionic fibers means synapsing occurs close to target organs, so effects are more localized.">Long preganglionic, short postganglionic fibers</span></li>
+              <li><span class="tooltip tooltip-bottom" data-tip="Ganglia in or near target organs means parasympathetic signaling is organ-specific, which helps you predict focused rather than diffuse responses.">Ganglia in or near target organs</span></li>
+              <li><span class="tooltip tooltip-bottom" data-tip="Dominant baseline rest-and-digest tone means this branch supports baseline heart-rate slowing, secretion, motility, and voiding physiology.">Dominant baseline rest-and-digest tone</span></li>
+            </ul>
+          </article>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        id="slide-3"
+        badge="Slide 3"
+        badgeTip="The badge Slide 3 tells you this section is a table-based prediction drill you should read cell by cell."
+        title="Organ Effects: Predictive Table"
+        titleTip="The title Organ Effects: Predictive Table means each organ row should be converted into expected therapeutic effects and adverse effects."
+        subtitle="Drug effects become intuitive when branch-level organ responses are known."
+        subtitleTip="The subtitle Drug effects become intuitive when branch-level organ responses are known tells you that mechanism-to-bedside reasoning starts from organ response patterns."
+        narrative="Start with the badge, Slide 3. The badge Slide 3 tells you this section is a table-based prediction drill you should read cell by cell. Now read the title, Organ Effects: Predictive Table. The title Organ Effects: Predictive Table means each organ row should be converted into expected therapeutic effects and adverse effects. Now read the subtitle. The subtitle Drug effects become intuitive when branch-level organ responses are known tells you that mechanism-to-bedside reasoning starts from organ response patterns. Read the first header, Organ. Header Organ means the first column names the target tissue you must assess at the bedside. Read the second header, Sympathetic. Header Sympathetic means the second column states effects expected when sympathetic signaling dominates. Read the third header, Parasympathetic. Header Parasympathetic means the third column states effects expected when parasympathetic signaling dominates. Heart row identifies the cardiac target where autonomic tone changes rate, force, and conduction. Heart sympathetic cell Increases HR, contractility, AV conduction means sympathetic drive raises chronotropy, inotropy, and AV nodal conduction, so watch for tachyarrhythmia stress. Heart parasympathetic cell Decreases HR and AV conduction means vagal tone slows pacemaker firing and AV conduction, which can protect or over-slow rhythm. Blood vessels row identifies vascular tone control that strongly influences perfusion pressure. Blood vessels sympathetic cell Mostly vasoconstriction; selective vasodilation in active skeletal muscle means baseline sympathetic tone supports blood pressure while exercise redistributes flow. Blood vessels parasympathetic cell Minimal direct effect in most beds means blood pressure changes are usually dominated by sympathetic mechanisms. Lungs row identifies airway caliber and secretion control, which directly affects ventilation. Lungs sympathetic cell Bronchodilation, lower secretions means sympathetic activation opens airways and reduces mucus burden. Lungs parasympathetic cell Bronchoconstriction, more mucus means cholinergic dominance can narrow airways and increase secretion load. GI tract row identifies motility and secretion patterns that drive bowel function. GI tract sympathetic cell Lower motility and secretion; tighter sphincters means stress physiology slows digestion and increases sphincter tone. GI tract parasympathetic cell Higher motility and secretion; relaxed sphincters means rest-and-digest physiology promotes transit and elimination. Bladder row identifies storage versus voiding balance, a common medication side-effect domain. Bladder sympathetic cell Detrusor relaxation and sphincter contraction means sympathetic tone favors urine storage. Bladder parasympathetic cell Detrusor contraction and sphincter relaxation means parasympathetic tone favors bladder emptying. Eye row identifies pupil and focus control that appears in many autonomic adverse-effect patterns. Eye sympathetic cell Mydriasis and far focus means sympathetic drive dilates pupils and supports distance vision. Eye parasympathetic cell Miosis and near focus means parasympathetic tone constricts pupils and supports accommodation. Skin row identifies autonomic signs that can serve as early bedside clues. Skin sympathetic cell Sweating and piloerection means sympathetic activation produces diaphoresis and piloerection findings. Skin parasympathetic cell Minimal direct role means most skin autonomic signs are not parasympathetic driven. Liver row identifies metabolic autonomic effects that alter glucose availability. Liver sympathetic cell Glycogenolysis and gluconeogenesis means sympathetic activation raises circulating glucose to support stress demand. Liver parasympathetic cell Glycogen synthesis support means parasympathetic tone favors energy storage and recovery states. Salivary glands row identifies secretion quality changes commonly reported by patients. Salivary glands sympathetic cell Small-volume viscous saliva means sympathetic dominance produces thicker, lower-volume secretions. Salivary glands parasympathetic cell Large-volume watery saliva means parasympathetic tone supports thin, abundant salivary flow. As the nurse, compare each row across all three columns because this table lets you predict expected effects, side effects, and monitoring priorities before you give the medication."
+      >
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th><span class="tooltip tooltip-right" data-tip="Header Organ means the first column names the target tissue you must assess at the bedside.">Organ</span></th>
+                <th><span class="tooltip tooltip-bottom" data-tip="Header Sympathetic means the second column states effects expected when sympathetic signaling dominates.">Sympathetic</span></th>
+                <th><span class="tooltip tooltip-bottom" data-tip="Header Parasympathetic means the third column states effects expected when parasympathetic signaling dominates.">Parasympathetic</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {organEffects.map(([organ, symp, para]) => {
+                const tips = organEffectTooltips[organ] ?? {
+                  organ: `${organ} row identifies the organ target for autonomic effect prediction.`,
+                  sympathetic: `${organ} sympathetic cell ${symp} describes expected effects when sympathetic tone dominates.`,
+                  parasympathetic: `${organ} parasympathetic cell ${para} describes expected effects when parasympathetic tone dominates.`,
+                };
+
+                return (
+                  <tr>
+                    <td class="font-semibold"><span class="tooltip tooltip-right" data-tip={tips.organ}>{organ}</span></td>
+                    <td><span class="tooltip tooltip-bottom" data-tip={tips.sympathetic}>{symp}</span></td>
+                    <td><span class="tooltip tooltip-bottom" data-tip={tips.parasympathetic}>{para}</span></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        id="slide-4"
+        badge="Slide 4"
+        badgeTip="The badge Slide 4 tells you this section focuses on transmitter identity and where each signal acts in the autonomic pathway."
+        title="Transmitters and the Dual-Transmitter Rule"
+        titleTip="The title Transmitters and the Dual-Transmitter Rule means you must track both molecule and synapse location to predict drug behavior."
+        subtitle="ACh is universal at autonomic ganglia; postganglionic signaling then diverges by branch."
+        subtitleTip="The subtitle ACh is universal at autonomic ganglia; postganglionic signaling then diverges by branch tells you ganglionic transmission is shared while terminal signaling differs by branch."
+        narrative="Start with the badge, Slide 4. The badge Slide 4 tells you this section focuses on transmitter identity and where each signal acts in the autonomic pathway. Now read the title, Transmitters and the Dual-Transmitter Rule. The title Transmitters and the Dual-Transmitter Rule means you must track both molecule and synapse location to predict drug behavior. Now read the subtitle. The subtitle ACh is universal at autonomic ganglia; postganglionic signaling then diverges by branch tells you ganglionic transmission is shared while terminal signaling differs by branch. Move to the first card heading, Norepinephrine. Norepinephrine heading identifies the principal sympathetic postganglionic transmitter at most neuroeffector junctions. Read the first card body, Primary sympathetic postganglionic transmitter; mostly terminated by reuptake. Primary sympathetic postganglionic transmitter; mostly terminated by reuptake means norepinephrine signaling intensity is strongly shaped by neuronal reuptake, so drugs that alter reuptake can markedly change response. Move to the second card heading, Epinephrine. Epinephrine heading identifies the adrenal medulla hormone with broad systemic receptor exposure. Read the second card body, Adrenal medulla hormone with broader beta activity and systemic effects. Adrenal medulla hormone with broader beta activity and systemic effects means circulating epinephrine can produce wider organ effects than a purely local synaptic signal. Move to the third card heading, Acetylcholine. Acetylcholine heading identifies the transmitter used at autonomic ganglia and parasympathetic end organs. Read the third card body, At all autonomic ganglia and parasympathetic end-organs; rapidly degraded by AChE. At all autonomic ganglia and parasympathetic end-organs; rapidly degraded by AChE means acetylcholine effects are brief unless acetylcholinesterase is inhibited, which can rapidly intensify cholinergic findings. Now read the warning alert text, Ganglionic nicotinic blockade suppresses both autonomic branches simultaneously. Ganglionic nicotinic blockade suppresses both autonomic branches simultaneously means nonselective ganglionic blockade can destabilize multiple systems at once instead of producing a focused therapeutic effect. As the nurse, use transmitter identity plus location to predict both desired response and safety risk before and after administration."
+      >
+        <div class="grid gap-4 md:grid-cols-3">
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="font-semibold"><span class="tooltip tooltip-bottom" data-tip="Norepinephrine heading identifies the principal sympathetic postganglionic transmitter at most neuroeffector junctions.">Norepinephrine</span></h3>
+            <p class="text-sm"><span class="tooltip tooltip-bottom" data-tip="Primary sympathetic postganglionic transmitter; mostly terminated by reuptake means norepinephrine signaling intensity is strongly shaped by neuronal reuptake, so drugs that alter reuptake can markedly change response.">Primary sympathetic postganglionic transmitter; mostly terminated by reuptake.</span></p>
+          </article>
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="font-semibold"><span class="tooltip tooltip-bottom" data-tip="Epinephrine heading identifies the adrenal medulla hormone with broad systemic receptor exposure.">Epinephrine</span></h3>
+            <p class="text-sm"><span class="tooltip tooltip-bottom" data-tip="Adrenal medulla hormone with broader beta activity and systemic effects means circulating epinephrine can produce wider organ effects than a purely local synaptic signal.">Adrenal medulla hormone with broader beta activity and systemic effects.</span></p>
+          </article>
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="font-semibold"><span class="tooltip tooltip-bottom" data-tip="Acetylcholine heading identifies the transmitter used at autonomic ganglia and parasympathetic end organs.">Acetylcholine</span></h3>
+            <p class="text-sm"><span class="tooltip tooltip-bottom" data-tip="At all autonomic ganglia and parasympathetic end-organs; rapidly degraded by AChE means acetylcholine effects are brief unless acetylcholinesterase is inhibited, which can rapidly intensify cholinergic findings.">At all autonomic ganglia and parasympathetic end-organs; rapidly degraded by AChE.</span></p>
+          </article>
+        </div>
+        <div class="alert alert-warning">
+          <span class="tooltip tooltip-bottom" data-tip="Ganglionic nicotinic blockade suppresses both autonomic branches simultaneously means nonselective ganglionic blockade can destabilize multiple systems at once instead of producing a focused therapeutic effect.">Ganglionic nicotinic blockade suppresses both autonomic branches simultaneously.</span>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        id="slide-5"
+        badge="Slide 5"
+        badgeTip="The badge Slide 5 tells you this section organizes receptor subtypes into a prediction table for targeted therapy and side effects."
+        title="Receptor Subtypes"
+        titleTip="The title Receptor Subtypes means you should connect each receptor label to locations, then convert that mapping into clinical effect predictions."
+        subtitle="Therapeutic precision and side-effect prediction depend on receptor-level thinking."
+        subtitleTip="The subtitle Therapeutic precision and side-effect prediction depend on receptor-level thinking tells you receptor mapping is the basis for both desired effects and adverse-effect anticipation."
+        narrative="Start with the badge, Slide 5. The badge Slide 5 tells you this section organizes receptor subtypes into a prediction table for targeted therapy and side effects. Now read the title, Receptor Subtypes. The title Receptor Subtypes means you should connect each receptor label to locations, then convert that mapping into clinical effect predictions. Now read the subtitle. The subtitle Therapeutic precision and side-effect prediction depend on receptor-level thinking tells you receptor mapping is the basis for both desired effects and adverse-effect anticipation. Read the first header, Receptor. Header Receptor means the first column names the control target you are activating or blocking. Read the second header, Main Locations. Header Main Locations means the second column tells you where in the body that receptor is functionally dominant. Read the third header, Activation Consequence. Header Activation Consequence means the third column tells you what physiology appears when that receptor is stimulated. a1 receptor row identifies the alpha-1 adrenergic target group most associated with vascular tone and outlet resistance. a1 locations cell Vascular smooth muscle, iris radial muscle, bladder sphincter means alpha-1 signaling controls vasoconstriction, pupil dilation pathways, and urinary sphincter tone. a1 consequence cell Vasoconstriction, mydriasis, urinary retention tendency means alpha-1 stimulation can raise blood pressure, dilate pupils, and increase retention risk. a2 receptor row identifies the alpha-2 feedback receptor that reduces sympathetic output when activated. a2 locations cell Presynaptic terminals and CNS means alpha-2 acts at nerve endings and central pathways to modulate norepinephrine signaling. a2 consequence cell Reduced NE release and reduced sympathetic outflow means alpha-2 activation can lower adrenergic drive and reduce hemodynamic stress. b1 receptor row identifies the beta-1 receptor group tied to cardiac performance and renin signaling. b1 locations cell Heart and kidney means beta-1 effects are concentrated in myocardium and juxtaglomerular renal tissue. b1 consequence cell Increased HR, contractility, conduction, and renin release means beta-1 stimulation increases cardiac workload and activates renin pathways. b2 receptor row identifies the beta-2 receptor group central to airway, uterine, vascular, and metabolic effects. b2 locations cell Bronchi, uterus, liver, skeletal muscle vasculature means beta-2 signaling affects breathing, uterine tone, glucose handling, and flow distribution. b2 consequence cell Bronchodilation, uterine relaxation, glycogenolysis means beta-2 activation can improve airflow, relax uterine smooth muscle, and raise glucose availability. b3 receptor row identifies the beta-3 receptor target linked to bladder storage physiology. b3 locations cell Bladder detrusor means beta-3 signaling acts directly on detrusor smooth muscle. b3 consequence cell Detrusor relaxation means beta-3 activation supports urine storage by reducing bladder contraction pressure. Muscarinic receptor row identifies parasympathetic end-organ receptors that drive rest-and-digest responses. Muscarinic locations cell Parasympathetic target organs means muscarinic signaling appears across heart, lungs, GI tract, bladder, eye, and glands. Muscarinic consequence cell Rest-and-digest effects (M2/M3 emphasis) means muscarinic activation slows cardiac pace while increasing smooth muscle and glandular activity. Nicotinic NN/NM row identifies two distinct nicotinic receptor domains that must not be conflated. Nicotinic locations cell Autonomic ganglia / NMJ means NN receptors mediate ganglionic transmission while NM receptors mediate skeletal neuromuscular transmission. Nicotinic consequence cell Autonomic transmission / skeletal muscle contraction means receptor subtype determines whether effects are autonomic-wide or focused on skeletal paralysis pathways. As the nurse, move row by row across all three columns because this receptor matrix predicts drug response, side effects, and monitoring priorities before administration."
+      >
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th><span class="tooltip tooltip-right" data-tip="Header Receptor means the first column names the control target you are activating or blocking.">Receptor</span></th>
+                <th><span class="tooltip tooltip-bottom" data-tip="Header Main Locations means the second column tells you where in the body that receptor is functionally dominant.">Main Locations</span></th>
+                <th><span class="tooltip tooltip-bottom" data-tip="Header Activation Consequence means the third column tells you what physiology appears when that receptor is stimulated.">Activation Consequence</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {receptorRows.map(([r, loc, eff]) => {
+                const tips = receptorRowTooltips[r] ?? {
+                  receptor: `${r} receptor row identifies the receptor target for this row.`,
+                  locations: `${r} locations cell ${loc} identifies where this receptor is primarily expressed.`,
+                  consequence: `${r} consequence cell ${eff} describes the expected activation effect.`,
+                };
+
+                return (
+                  <tr>
+                    <td class="font-semibold"><span class="tooltip tooltip-right" data-tip={tips.receptor}>{r}</span></td>
+                    <td><span class="tooltip tooltip-bottom" data-tip={tips.locations}>{loc}</span></td>
+                    <td><span class="tooltip tooltip-bottom" data-tip={tips.consequence}>{eff}</span></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </LectureSlide>
+
+      <LectureSlide
+        id="slide-6"
+        badge="Slide 6"
+        badgeTip="The badge Slide 6 tells you this section gives the reusable reasoning sequence for any autonomic drug question."
+        title="Agonist vs Antagonist Framework"
+        titleTip="The title Agonist vs Antagonist Framework means drug interpretation starts with receptor action direction, then predicts effects from physiology."
+        subtitle="One repeatable derivation process for the entire course."
+        subtitleTip="The subtitle One repeatable derivation process for the entire course tells you this method should be applied consistently from first lecture through final integration."
+        narrative="Start with the badge, Slide 6. The badge Slide 6 tells you this section gives the reusable reasoning sequence for any autonomic drug question. Now read the title, Agonist vs Antagonist Framework. The title Agonist vs Antagonist Framework means drug interpretation starts with receptor action direction, then predicts effects from physiology. Now read the subtitle. The subtitle One repeatable derivation process for the entire course tells you this method should be applied consistently from first lecture through final integration. Move to the left card heading, Four-Step Derivation. Four-Step Derivation heading means this is your mandatory sequence for safe bedside pharmacology reasoning. Read step one, Identify receptor target. Identify receptor target means first specify exactly which receptor the drug acts on before predicting anything else. Read step two, Determine agonist vs antagonist. Determine agonist vs antagonist means define whether the drug turns receptor signaling up or blocks native signaling. Read step three, Recall normal receptor activation effect. Recall normal receptor activation effect means bring in baseline physiology for that receptor in its primary tissues. Read step four, Apply direction of change. Apply direction of change means combine receptor physiology with agonist or antagonist direction to derive expected therapeutic effect and adverse effects. Move to the right card heading, Worked Examples. Worked Examples heading means you now apply the same four steps to real medications. Read the first example label, Albuterol. Albuterol label identifies the beta-2 example used to practice bronchodilator reasoning. Read the first example body, b2 agonist -> bronchodilation -> rescue in asthma. b2 agonist -> bronchodilation -> rescue in asthma means receptor-targeted agonism predicts intended airway benefit while reminding you to monitor off-target effects. Read the second example label, Atropine. Atropine label identifies the muscarinic antagonist example used to practice vagal-block reasoning. Read the second example body, muscarinic antagonist -> removes vagal slowing -> raises HR in bradycardia. muscarinic antagonist -> removes vagal slowing -> raises HR in bradycardia means blocking parasympathetic restraint can produce therapeutic chronotropy while requiring rhythm and symptom monitoring. As the nurse, use this exact four-step method every time so drug reasoning is consistent, explainable, and safe under bedside pressure."
+        tone="success"
+      >
+        <div class="grid gap-4 md:grid-cols-2">
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="mb-2 font-semibold"><span class="tooltip tooltip-bottom" data-tip="Four-Step Derivation heading means this is your mandatory sequence for safe bedside pharmacology reasoning.">Four-Step Derivation</span></h3>
+            <ol class="list-decimal space-y-1 pl-5">
+              <li><span class="tooltip tooltip-bottom" data-tip="Identify receptor target means first specify exactly which receptor the drug acts on before predicting anything else.">Identify receptor target</span></li>
+              <li><span class="tooltip tooltip-bottom" data-tip="Determine agonist vs antagonist means define whether the drug turns receptor signaling up or blocks native signaling.">Determine agonist vs antagonist</span></li>
+              <li><span class="tooltip tooltip-bottom" data-tip="Recall normal receptor activation effect means bring in baseline physiology for that receptor in its primary tissues.">Recall normal receptor activation effect</span></li>
+              <li><span class="tooltip tooltip-bottom" data-tip="Apply direction of change means combine receptor physiology with agonist or antagonist direction to derive expected therapeutic effect and adverse effects.">Apply direction of change</span></li>
+            </ol>
+          </article>
+          <article class="rounded-box bg-base-200 p-4">
+            <h3 class="mb-2 font-semibold"><span class="tooltip tooltip-bottom" data-tip="Worked Examples heading means you now apply the same four steps to real medications.">Worked Examples</span></h3>
+            <p><span class="font-semibold"><span class="tooltip tooltip-bottom" data-tip="Albuterol label identifies the beta-2 example used to practice bronchodilator reasoning.">Albuterol:</span></span> <span class="tooltip tooltip-bottom" data-tip="b2 agonist -> bronchodilation -> rescue in asthma means receptor-targeted agonism predicts intended airway benefit while reminding you to monitor off-target effects.">b2 agonist -> bronchodilation -> rescue in asthma.</span></p>
+            <p><span class="font-semibold"><span class="tooltip tooltip-bottom" data-tip="Atropine label identifies the muscarinic antagonist example used to practice vagal-block reasoning.">Atropine:</span></span> <span class="tooltip tooltip-bottom" data-tip="muscarinic antagonist -> removes vagal slowing -> raises HR in bradycardia means blocking parasympathetic restraint can produce therapeutic chronotropy while requiring rhythm and symptom monitoring.">muscarinic antagonist -> removes vagal slowing -> raises HR in bradycardia.</span></p>
+          </article>
+        </div>
+      </LectureSlide>
+    </main>
+  </body>
+</html>

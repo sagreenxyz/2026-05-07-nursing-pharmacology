@@ -4,3 +4,40 @@
 :root {
   color-scheme: light;
 }
+
+/* Keep tooltip overlays above cards, nav, and other stacked UI layers. */
+.tooltip::before,
+.tooltip::after,
+.tooltip-content {
+  z-index: 2147483647 !important;
+}
+
+/* Tooltips must remain readable and visually opposite to dark slides. */
+.tooltip,
+.tooltip::before,
+.tooltip::after,
+.tooltip-content {
+  font-weight: 400 !important;
+}
+
+.tooltip {
+  --tooltip-color: #ffffff !important;
+  --tooltip-text-color: #111827 !important;
+}
+
+.tooltip::before,
+.tooltip-content {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #d1d5db !important;
+  text-shadow: none !important;
+}
+
+/* Prevent ancestor clipping on lecture slides so tooltip layers can escape card bounds. */
+.lecture-slide,
+.lecture-slide .card-body,
+.lecture-slide .stats,
+.lecture-slide .stat,
+.lecture-slide .tooltip {
+  overflow: visible !important;
+}
