@@ -6,8 +6,8 @@ import '../styles/global.css';
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+		<link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Nursing Pharmacology</title>
@@ -30,7 +30,7 @@ import '../styles/global.css';
 							and content next.
 						</p>
 						<div class="flex justify-center">
-							<a href="/autonomic-nervous-system/" class="btn btn-primary btn-wide">
+							<a href={`${import.meta.env.BASE_URL}autonomic-nervous-system/`} class="btn btn-primary btn-wide">
 								Open Autonomic Nervous System Page
 							</a>
 						</div>

@@ -34,11 +34,11 @@ const clinicalMap = [
   <body class="min-h-screen bg-base-200">
     <div class="navbar sticky top-0 z-10 border-b border-base-300 bg-base-100/95 shadow-sm backdrop-blur">
       <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4">
-        <a href="/autonomic-nervous-system/" class="btn btn-ghost text-lg normal-case">ANS Lecture Deck</a>
+        <a href={`${import.meta.env.BASE_URL}autonomic-nervous-system/`} class="btn btn-ghost text-lg normal-case">ANS Lecture Deck</a>
         <div class="join">
-          <a href="/autonomic-nervous-system/lecture-1/" class="btn btn-sm join-item">Lecture 1</a>
+          <a href={`${import.meta.env.BASE_URL}autonomic-nervous-system/lecture-1/`} class="btn btn-sm join-item">Lecture 1</a>
           <a class="btn btn-sm join-item btn-disabled">Lecture 2</a>
-          <a href="/autonomic-nervous-system/lecture-3/" class="btn btn-sm join-item">Lecture 3</a>
+          <a href={`${import.meta.env.BASE_URL}autonomic-nervous-system/lecture-3/`} class="btn btn-sm join-item">Lecture 3</a>
         </div>
       </div>
     </div>
