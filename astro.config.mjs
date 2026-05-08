@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 const repo = process.env.GITHUB_REPOSITORY?.split('/')[1] ?? '';
@@ -16,4 +17,7 @@ const base = process.env.ASTRO_BASE
 export default defineConfig({
 	site,
 	base,
+	vite: {
+		plugins: [tailwindcss()],
+	},
 });

@@ -1,4 +1,5 @@
 ---
+import '../styles/global.css';
 
 ---
 
@@ -9,9 +10,79 @@
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Nursing Pharmacology</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="min-h-screen bg-base-200">
+		<div class="navbar bg-base-100 shadow-sm">
+			<div class="mx-auto w-full max-w-6xl px-4">
+				<a class="btn btn-ghost text-lg normal-case">Nursing Pharmacology</a>
+			</div>
+		</div>
+
+		<main class="mx-auto grid w-full max-w-6xl gap-6 px-4 py-10">
+			<section class="hero rounded-box bg-base-100 shadow-xl">
+				<div class="hero-content py-14 text-center">
+					<div class="max-w-2xl space-y-5">
+						<div class="badge badge-primary badge-outline">Study Dashboard</div>
+						<h1 class="text-4xl font-bold md:text-5xl">Learn Core Drug Classes Faster</h1>
+						<p class="text-base-content/80">
+							Use focused notes, quick checks, and daily practice cards to build confidence
+							with medication safety and exam prep.
+						</p>
+						<div class="flex flex-wrap justify-center gap-3">
+							<button class="btn btn-primary">Start Practice</button>
+							<button class="btn btn-outline">Review Drug Guide</button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="grid gap-4 md:grid-cols-3">
+				<article class="card bg-base-100 shadow-md">
+					<div class="card-body">
+						<h2 class="card-title">Flashcards</h2>
+						<p>Memorize indications, contraindications, and adverse effects in short drills.</p>
+						<div class="card-actions justify-end">
+							<button class="btn btn-sm btn-secondary">Open</button>
+						</div>
+					</div>
+				</article>
+
+				<article class="card bg-base-100 shadow-md">
+					<div class="card-body">
+						<h2 class="card-title">Drug Calculations</h2>
+						<p>Practice dose and infusion calculations with instant feedback.</p>
+						<div class="card-actions justify-end">
+							<button class="btn btn-sm btn-accent">Practice</button>
+						</div>
+					</div>
+				</article>
+
+				<article class="card bg-base-100 shadow-md">
+					<div class="card-body">
+						<h2 class="card-title">Case Scenarios</h2>
+						<p>Apply pharmacology decisions to realistic bedside case prompts.</p>
+						<div class="card-actions justify-end">
+							<button class="btn btn-sm">Start</button>
+						</div>
+					</div>
+				</article>
+			</section>
+
+			<section class="mockup-window border border-base-300 bg-base-100">
+				<div class="grid gap-4 p-6">
+					<div class="flex items-center justify-between">
+						<h2 class="text-xl font-semibold">Today&apos;s Focus</h2>
+						<span class="badge badge-success">On Track</span>
+					</div>
+					<progress class="progress progress-primary w-full" value="68" max="100"></progress>
+					<ul class="menu rounded-box bg-base-200">
+						<li><a>Antihypertensives: 12 cards due</a></li>
+						<li><a>Insulin safety checks: 2 scenarios left</a></li>
+						<li><a>Antibiotics review quiz: pending</a></li>
+					</ul>
+				</div>
+			</section>
+		</main>
 	</body>
 </html>
